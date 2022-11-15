@@ -26,6 +26,7 @@ function preprocessData() {
 
 function displayTextView() {
     var searched = document.querySelector('input[name = "textViewRadioButton"]:checked').value;
+    var re = new RegExp(searched, "g");
     document.getElementById('textView').innerHTML = "";
     for(var i = 0; i<textViewList.length; i++) {
         var currThread = textViewList[i];
@@ -33,7 +34,6 @@ function displayTextView() {
         for(var j = 0; j<4; j++) {
             var node = document.createElement("p");
             var textVal = currThread[j].toLowerCase();
-            var re = new RegExp(searched, "g");
             var newText = textVal.replace(re, `<mark style="background: #00ced1!important">${searched}</mark>`);
             node.innerHTML = newText;
             element.appendChild(node);
