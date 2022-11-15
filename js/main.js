@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log(dataset);
             // pre-process data for visualizations, add your preprocessing in this function
             preprocessData();
+            displayTextView();
          });
 });
 
