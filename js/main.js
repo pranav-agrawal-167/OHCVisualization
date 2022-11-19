@@ -1,12 +1,13 @@
 let dataset;
 let textViewList = [];
-let textViewKeys = ["Text (OP) ", "Reply 1", "Reply 2", "Reply 3"];
+let textViewKeys = ["Text (OP)", "Reply 1", "Reply 2", "Reply 3"];
+let twoWayBarList = [];
+let twoWayBarListKeys = ["ID", "QuickestReply", "OPSentiment", "Total Number of Replies", "Conversation Duration"];
 document.addEventListener('DOMContentLoaded', function () {
-    Promise.all([d3.csv('data/datasheet.csv')])
+    Promise.all([d3.csv('data/DiabetesDaily2.csv')])
         .then(function (values) {
             console.log('loaded csv file');
             dataset = values[0];
-            console.log(dataset);
             // pre-process data for visualizations, add your preprocessing in this function
             preprocessData();
             displayTextView();
@@ -22,6 +23,12 @@ function preprocessData() {
             currTextViewDataList.push(currText);
         }
         textViewList.push(currTextViewDataList);
+        currChartList = [];
+        for(var key in twoWayBarListKeys) {
+            var currVal = dataset[i][twoWayBarListKeys[key]];
+            currChartList.push(currVal);
+        }
+        twoWayBarList.push(currChartList);
     }
 }
 
@@ -44,6 +51,31 @@ function displayTextView() {
         hrLine.style.height = "1px";
         hrLine.style.backgroundColor = "black";
         document.getElementById('textView').appendChild(hrLine);
+    }
+}
+
+function displayChartView() {
+    var parameter = document.querySelector('input[name = "verticalOrderButton"]:checked').value;
+    var key = 0;
+    if(parameter == "temporalButton") {
+        key = 1;
+    } else if(parameter == "sentimentScore") {
+        key = 2;
+    } else if(parameter == "replyCountButton") {
+        key = 3;
+    } else {
+        key = 4;
+    }
+    var copyListForSort = twoWayBarList;
+    copyListForSort.sort(sortFunction);
+
+    function sortFunction(a, b) {
+        if (a[key] === b[key]) {
+            return 0;
+        }
+        else {
+            return (a[key] < b[key]) ? -1 : 1;
+        }
     }
 }
 
