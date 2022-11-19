@@ -53,7 +53,7 @@ for i,r in df.iterrows():
         Reply1Personal.append('')
         Reply2Personal.append('')
         Reply3Personal.append('')
-    QuestionLength.append((text))
+    QuestionLength.append(len(text))
 
 
 df['MajoritySentiment'] = MajoritySentiment
