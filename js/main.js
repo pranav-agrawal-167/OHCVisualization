@@ -186,4 +186,168 @@ function displayHistogramView() {
         .style("fill", "#69b3a2")
 
     //----------------------------------hist3---------------------------------------------------
+
+    min = 0
+   max = 0
+    qLen = []
+    dataset.forEach(d => {
+    qLen.push(+d['QuestionLength']) 
+   });
+   min = Math.min(...qLen)
+   max = Math.max(...qLen)
+   console.log(min)
+    var hist3 = d3.select("#hist3")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var x = d3.scaleLinear()
+    .domain([min, max])
+        // .domain([min, d3.max(dataset, function (d) { 
+            
+        //     return +d['QuestionLength'] })])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+        .range([0, width]);
+    hist3.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+        hist3.append("text")
+        .attr("class", "x label")
+        .attr("text-anchor", "end")
+        .attr("x", width-60)
+        .attr("y", height+25)
+        .style("font-size", "10px")
+        .text("QuestionLength");
+
+    var histogram = d3.histogram()
+        .value(function (d) {
+            return +d['QuestionLength'];
+        })
+        .domain(x.domain())
+        .thresholds(x.ticks(8));
+
+    var bins = histogram(dataset);
+
+    var y = d3.scaleLinear()
+        .range([height, 0]);
+    y.domain([0, d3.max(bins, function (d) {
+        return d.length;
+    })]);
+    hist3.append("g")
+        .call(d3.axisLeft(y));
+
+    hist3.selectAll("rect")
+        .data(bins)
+        .enter()
+        .append("rect")
+        .attr("x", 1)
+        .attr("transform", function (d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
+        .attr("width", function (d) { return x(d.x1) - x(d.x0) - 1; })
+        .attr("height", function (d) { return height - y(d.length); })
+        .style("fill", "#69b3a2")
+
+
+// -----------------------------------------------------------hist4------------------------------------------------------------
+    var hist4 = d3.select("#hist4")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var x = d3.scaleLinear()
+        .domain([0, d3.max(dataset, function (d) { return +d['PersonalScores'] })])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+        .range([0, width]);
+    hist4.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+        hist4.append("text")
+        .attr("class", "x label")
+        .attr("text-anchor", "end")
+        .attr("x", width-60)
+        .attr("y", height+25)
+        .style("font-size", "10px")
+        .text("PersonalScores");
+
+    var histogram = d3.histogram()
+        .value(function (d) {
+            return +d['PersonalScores'];
+        })
+        .domain(x.domain())
+        .thresholds(x.ticks(8));
+
+    var bins = histogram(dataset);
+
+    var y = d3.scaleLinear()
+        .range([height, 0]);
+    y.domain([0, d3.max(bins, function (d) {
+        return d.length;
+    })]);
+    hist4.append("g")
+        .call(d3.axisLeft(y));
+
+    hist4.selectAll("rect")
+        .data(bins)
+        .enter()
+        .append("rect")
+        .attr("x", 1)
+        .attr("transform", function (d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
+        .attr("width", function (d) { return x(d.x1) - x(d.x0) - 1; })
+        .attr("height", function (d) { return height - y(d.length); })
+        .style("fill", "#69b3a2")
+
+
+
+    // -----------------------------------------------------------------hist5-----------------------------------------------------------
+    var hist5 = d3.select("#hist5")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var x = d3.scaleLinear()
+        .domain([0, d3.max(dataset, function (d) { return +d['CompoundSentimentScore'] })])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+        .range([0, width]);
+    hist5.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+        hist5.append("text")
+        .attr("class", "x label")
+        .attr("text-anchor", "end")
+        .attr("x", width-60)
+        .attr("y", height+25)
+        .style("font-size", "10px")
+        .text("CompoundSentimentScore");
+
+    var histogram = d3.histogram()
+        .value(function (d) {
+            return +d['CompoundSentimentScore'];
+        })
+        .domain(x.domain())
+        .thresholds(x.ticks(8));
+
+    var bins = histogram(dataset);
+
+    var y = d3.scaleLinear()
+        .range([height, 0]);
+    y.domain([0, d3.max(bins, function (d) {
+        return d.length;
+    })]);
+    hist5.append("g")
+        .call(d3.axisLeft(y));
+
+    hist5.selectAll("rect")
+        .data(bins)
+        .enter()
+        .append("rect")
+        .attr("x", 1)
+        .attr("transform", function (d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
+        .attr("width", function (d) { return x(d.x1) - x(d.x0) - 1; })
+        .attr("height", function (d) { return height - y(d.length); })
+        .style("fill", "#69b3a2")
 }
