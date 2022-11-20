@@ -2,7 +2,7 @@ let dataset;
 let textViewList = [];
 let textViewKeys = ["Text (OP)", "Reply 1", "Reply 2", "Reply 3"];
 let twoWayBarList = [];
-let twoWayBarListKeys = ["ID", "QuickestReply", "OPSentiment", "Total Number of Replies", "Conversation Duration"];
+let twoWayBarListKeys = ["ID", "QuickestReply", "OPSentiment", "Total Number of Replies", "Conversation Duration", "Text (OP)"];
 document.addEventListener('DOMContentLoaded', function () {
     Promise.all([d3.csv('data/DiabetesDaily2.csv')])
         .then(function (values) {
@@ -24,13 +24,20 @@ function preprocessData() {
             currTextViewDataList.push(currText);
         }
         textViewList.push(currTextViewDataList);
-        currChartList = [];
-        for (var key in twoWayBarListKeys) {
-            var currVal = dataset[i][twoWayBarListKeys[key]];
-            currChartList.push(currVal);
+
+        var currChartObj = {};
+        for(var key in twoWayBarListKeys) {
+            if(key == 5) {
+                var currVal = dataset[i][twoWayBarListKeys[key]].length;
+                currChartObj[twoWayBarListKeys[key]] = +currVal;
+            } else {
+                var currVal = dataset[i][twoWayBarListKeys[key]];
+                currChartObj[twoWayBarListKeys[key]] = +currVal;
+            }
         }
-        twoWayBarList.push(currChartList);
+        twoWayBarList.push(currChartObj);
     }
+    console.log(twoWayBarList);
 }
 
 function scatterPlot(){
@@ -114,26 +121,24 @@ function displayTextView() {
 
 function displayChartView() {
     var parameter = document.querySelector('input[name = "verticalOrderButton"]:checked').value;
-    var key = 0;
-    if (parameter == "temporalButton") {
-        key = 1;
-    } else if (parameter == "sentimentScore") {
-        key = 2;
-    } else if (parameter == "replyCountButton") {
-        key = 3;
-    } else {
-        key = 4;
-    }
     var copyListForSort = twoWayBarList;
-    copyListForSort.sort(sortFunction);
-
-    function sortFunction(a, b) {
-        if (a[key] === b[key]) {
-            return 0;
-        }
-        else {
-            return (a[key] < b[key]) ? -1 : 1;
-        }
+    var byProperty = function(prop) {
+        return function(a,b) {
+            if (typeof a[prop] == "number") {
+                return (a[prop] - b[prop]);
+            } else {
+                return ((a[prop] < b[prop]) ? -1 : ((a[prop] > b[prop]) ? 1 : 0));
+            }
+        };
+    };
+    if(parameter == "temporalButton") {
+        copyListForSort.sort(byProperty("QuickestReply"));
+    } else if(parameter == "sentimentScore") {
+        copyListForSort.sort(byProperty("OPSentiment"));
+    } else if(parameter == "replyCountButton") {
+        copyListForSort.sort(byProperty("Total Number of Replies"));
+    } else {
+        copyListForSort.sort(byProperty("Conversation Duration"));
     }
 }
 
