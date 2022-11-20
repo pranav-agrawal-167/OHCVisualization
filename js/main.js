@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
             preprocessData();
             displayTextView();
             displayHistogramView();
+            scatterPlot();
         });
 });
 
@@ -30,6 +31,63 @@ function preprocessData() {
         }
         twoWayBarList.push(currChartList);
     }
+}
+
+function scatterPlot(){
+    // set the dimensions and margins of the graph
+    const margin = {top: 10, right: 30, bottom: 30, left: 60},
+            width = 260 - margin.left - margin.right,
+            height = 200 - margin.top - margin.bottom;
+    
+            
+    // append the svg object to the body of the page
+    const svg = d3.select("#scatter")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", `translate(${margin.left}, ${margin.top})`);
+    
+    //Read the data
+    d3.csv("data/out.csv").then( function(data) {
+
+        
+        var c_data  = []
+        var thread = []
+        for(i = 0;i<data.length;i++){
+            c_data.push(data[i]['tsne1'])
+            thread.push(i)
+        }
+        max_y = d3.max(c_data)
+
+        // Add X axis
+        const x = d3.scaleLinear()
+        .domain([-125, 50])
+        .range([ 0, width ]);
+        svg.append("g")
+        .attr("transform", `translate(0, ${height})`)
+        .call(d3.axisBottom(x));
+    
+        // Add Y axis
+        const y = d3.scaleLinear()
+        .domain([-40, 80])
+        .range([ height, 0]);
+        svg.append("g")
+        .call(d3.axisLeft(y));
+    
+        // Add dots
+        svg.append('g')
+        .selectAll("dot")
+        .data(data)
+        .join("circle")
+            .attr("cx", function (d) { 
+                console.log(d.tsne1)
+                return x(d.tsne1); } )
+            .attr("cy", function (d) { return y(d.tsne2); } )
+            .attr("r", 1.5)
+            .style("fill", "#69b3a2")
+    
+    })
 }
 
 function displayTextView() {
