@@ -490,6 +490,8 @@ function chart(result) {
                     return barColor(d.data.Reply3Sentiment);
                 }
             })
+            .attr("stroke", "#000")
+            .attr("stroke-width", "0.3")
             .merge(bars)
         .transition().duration(speed)
             .attr("y", d => y(d[1]))
