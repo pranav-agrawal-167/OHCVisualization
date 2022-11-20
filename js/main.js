@@ -2,7 +2,7 @@ let dataset;
 let textViewList = [];
 let textViewKeys = ["Text (OP)", "Reply 1", "Reply 2", "Reply 3"];
 let twoWayBarList = [];
-let twoWayBarListKeys = ["ID", "QuickestReply", "OPSentiment", "Total Number of Replies", "Conversation Duration", "Text (OP)"];
+let twoWayBarListKeys = ["ID", "QuickestReply", "OPSentiment", "Total Number of Replies", "Conversation Duration", "Reply1Sentiment", "Reply2Sentiment", "Reply3Sentiment", "Text (OP)"];
 document.addEventListener('DOMContentLoaded', function () {
     Promise.all([d3.csv('data/DiabetesDaily2.csv')])
         .then(function (values) {
@@ -27,17 +27,19 @@ function preprocessData() {
 
         var currChartObj = {};
         for(var key in twoWayBarListKeys) {
-            if(key == 5) {
-                var currVal = dataset[i][twoWayBarListKeys[key]].length;
-                currChartObj[twoWayBarListKeys[key]] = +currVal;
+            if(twoWayBarListKeys[key] == "Text (OP)") {
+                var currVal = +dataset[i][twoWayBarListKeys[key]].length;
+                currChartObj[twoWayBarListKeys[key]] = -currVal;
             } else {
                 var currVal = dataset[i][twoWayBarListKeys[key]];
                 currChartObj[twoWayBarListKeys[key]] = +currVal;
             }
         }
+        currChartObj["Reply1"] = 20;
+        currChartObj["Reply2"] = 20;
+        currChartObj["Reply3"] = 20;
         twoWayBarList.push(currChartObj);
     }
-    console.log(twoWayBarList);
 }
 
 function scatterPlot(){
@@ -87,9 +89,7 @@ function scatterPlot(){
         .selectAll("dot")
         .data(data)
         .join("circle")
-            .attr("cx", function (d) { 
-                console.log(d.tsne1)
-                return x(d.tsne1); } )
+            .attr("cx", function (d) { return x(d.tsne1); } )
             .attr("cy", function (d) { return y(d.tsne2); } )
             .attr("r", 1.5)
             .style("fill", "#69b3a2")
@@ -140,6 +140,7 @@ function displayChartView() {
     } else {
         copyListForSort.sort(byProperty("Conversation Duration"));
     }
+    chart(copyListForSort);
 }
 
 function displayHistogramView() {
@@ -260,7 +261,6 @@ function displayHistogramView() {
     });
     min = Math.min(...qLen)
     max = Math.max(...qLen)
-    console.log(min)
     var hist3 = d3.select("#hist3")
         .append("svg")
         .attr("width", h3_width + margin.left + margin.right)
@@ -412,4 +412,101 @@ function displayHistogramView() {
         .attr("width", function (d) { return x(d.x1) - x(d.x0) - 1; })
         .attr("height", function (d) { return height - y(d.length); })
         .style("fill", "#69b3a2")
+}
+
+function chart(result) {
+    d3.selectAll("#chart> *").remove(); 
+    var keys = Object.keys(result[0]).slice(8),
+        copy = [].concat(keys);
+    var svg = d3.select("#chart"),
+        margin = {top: 5, right: 5, bottom: 5, left: 10},
+        width = +svg.attr("width") - margin.left - margin.right,
+        height = +svg.attr("height") - margin.top - margin.bottom;
+
+    var x = d3.scaleBand()
+        .rangeRound([margin.left, width - margin.right])
+        .padding(0.1);
+
+    var y = d3.scaleLinear()
+        .rangeRound([height - margin.bottom, margin.top]);
+
+    var color = d3.scaleOrdinal()
+        .range(["steelblue", "darkorange", "lightblue", "crimson","green"]);
+
+    var xAxis = svg.append("g")
+        .attr("transform", "translate(0," + (height - margin.bottom) + ")")
+        .attr("class","x-axis");
+
+    var yAxis = svg.append("g")
+        .attr("transform", "translate(" + margin.left + ",0)")
+        .attr("class", "y-axis");
+
+    draw("QuickestReply", 0, keys);
+
+    function draw(input, speed) {
+        var barColor = d3.scaleThreshold().domain([-1, -0.3, 0.3])
+            .range(["steelblue", "red", "white", "green"])
+
+        var data = result;
+
+        var series = d3.stack()
+            .keys(keys)
+            .offset(d3.stackOffsetDiverging)(data);
+
+        x.domain(data.map(d => d.ID));
+
+        y.domain([
+            d3.min(series, stackMin), 
+            d3.max(series, stackMax)
+        ]).nice();
+
+        var barGroups = svg.selectAll("g.layer")
+            .data(series, d => d.key);
+
+        barGroups.exit().remove();
+
+        barGroups.enter().insert("g", ".x-axis")
+            .classed('layer', true);
+
+        var bars = svg.selectAll("g.layer").selectAll(".bars")
+            .data(d => d, d => d.data.ID);
+
+        bars.exit().remove();
+
+        bars.enter().append("rect")
+            .attr("class", "bars")
+            .attr("width", x.bandwidth())
+            .attr("x", d => x(d.data.ID))
+            .attr("y", d => y(d[1]))
+            .attr("fill", function(d){
+                if(d[0] < 0) { // number of characters bar => fixed color - steelblue
+                    return barColor(-100);
+                } else if(d[0] == 0) { // Reply 1 bar
+                    return barColor(d.data.Reply1Sentiment);
+                } else if(d[0] == 20) { // Reply 2 bar
+                    return barColor(d.data.Reply2Sentiment);
+                } else if(d[0] == 40) { // Reply 3 bar
+                    return barColor(d.data.Reply3Sentiment);
+                }
+            })
+            .merge(bars)
+        .transition().duration(speed)
+            .attr("y", d => y(d[1]))
+            .attr("height", d => Math.abs(y(d[0])) - y(d[1]))
+
+        xAxis.transition().duration(speed)
+            .attr("transform", "translate(0," + y(0) + ")")
+            .call(d3.axisBottom(x));
+
+        yAxis.transition().duration(speed)
+            .call(d3.axisLeft(y));
+    }
+}
+
+function stackMin(serie) {
+    return d3.min(serie, function(d) { return d[0]; });
+}
+
+function stackMax(serie) {
+    return d3.max(serie, function(d) { return d[1]; });
 }
