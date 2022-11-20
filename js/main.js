@@ -35,9 +35,9 @@ function preprocessData() {
 
 function scatterPlot(){
     // set the dimensions and margins of the graph
-    const margin = {top: 10, right: 30, bottom: 30, left: 60},
-            width = 260 - margin.left - margin.right,
-            height = 200 - margin.top - margin.bottom;
+    const margin = {top: 5, right: 30, bottom: 30, left: 30},
+            width = 350 - margin.left - margin.right,
+            height = 300 - margin.top - margin.bottom;
     
             
     // append the svg object to the body of the page
@@ -62,7 +62,7 @@ function scatterPlot(){
 
         // Add X axis
         const x = d3.scaleLinear()
-        .domain([-125, 50])
+        .domain([-140, 70])
         .range([ 0, width ]);
         svg.append("g")
         .attr("transform", `translate(0, ${height})`)
