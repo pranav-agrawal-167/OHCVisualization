@@ -24,7 +24,7 @@ function preprocessData() {
         }
         textViewList.push(currTextViewDataList);
         currChartList = [];
-        for(var key in twoWayBarListKeys) {
+        for (var key in twoWayBarListKeys) {
             var currVal = dataset[i][twoWayBarListKeys[key]];
             currChartList.push(currVal);
         }
@@ -57,11 +57,11 @@ function displayTextView() {
 function displayChartView() {
     var parameter = document.querySelector('input[name = "verticalOrderButton"]:checked').value;
     var key = 0;
-    if(parameter == "temporalButton") {
+    if (parameter == "temporalButton") {
         key = 1;
-    } else if(parameter == "sentimentScore") {
+    } else if (parameter == "sentimentScore") {
         key = 2;
-    } else if(parameter == "replyCountButton") {
+    } else if (parameter == "replyCountButton") {
         key = 3;
     } else {
         key = 4;
@@ -81,7 +81,7 @@ function displayChartView() {
 
 function displayHistogramView() {
     var margin = { top: 10, right: 30, bottom: 80, left: 40 },
-        width = 260 - margin.left - margin.right,
+        width = 260,
         height = 200 - margin.top - margin.bottom;
 
     var hist1 = d3.select("#hist1")
@@ -92,17 +92,17 @@ function displayHistogramView() {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     var x = d3.scaleLinear()
-        .domain([0, d3.max(dataset, function (d) { return +d['Total Number of Replies'] })]) 
+        .domain([0, d3.max(dataset, function (d) { return +d['Total Number of Replies'] })])
         .range([0, width]);
     hist1.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x));
 
-        hist1.append("text")
+    hist1.append("text")
         .attr("class", "x label")
         .attr("text-anchor", "end")
-        .attr("x", width-60)
-        .attr("y", height+25)
+        .attr("x", width - 60)
+        .attr("y", height + 25)
         .style("font-size", "10px")
         .text("Total Number of Replies");
 
@@ -150,11 +150,11 @@ function displayHistogramView() {
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x));
 
-        hist2.append("text")
+    hist2.append("text")
         .attr("class", "x label")
         .attr("text-anchor", "end")
-        .attr("x", width-60)
-        .attr("y", height+25)
+        .attr("x", width - 60)
+        .attr("y", height + 25)
         .style("font-size", "10px")
         .text("'Conversation Duration");
 
@@ -187,37 +187,36 @@ function displayHistogramView() {
 
     //----------------------------------hist3---------------------------------------------------
 
+    h3_width = 400,
+    h3_height = 200 - margin.top - margin.bottom;
     min = 0
-   max = 0
+    max = 0
     qLen = []
     dataset.forEach(d => {
-    qLen.push(+d['QuestionLength']) 
-   });
-   min = Math.min(...qLen)
-   max = Math.max(...qLen)
-   console.log(min)
+        qLen.push(+d['QuestionLength'])
+    });
+    min = Math.min(...qLen)
+    max = Math.max(...qLen)
+    console.log(min)
     var hist3 = d3.select("#hist3")
         .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr("width", h3_width + margin.left + margin.right)
+        .attr("height", h3_height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     var x = d3.scaleLinear()
-    .domain([min, max])
-        // .domain([min, d3.max(dataset, function (d) { 
-            
-        //     return +d['QuestionLength'] })])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
-        .range([0, width]);
+        .domain([min, max])
+        .range([0, h3_width]);
     hist3.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x));
 
-        hist3.append("text")
+    hist3.append("text")
         .attr("class", "x label")
         .attr("text-anchor", "end")
-        .attr("x", width-60)
-        .attr("y", height+25)
+        .attr("x", h3_width - 200)
+        .attr("y", height + 25)
         .style("font-size", "10px")
         .text("QuestionLength");
 
@@ -249,7 +248,7 @@ function displayHistogramView() {
         .style("fill", "#69b3a2")
 
 
-// -----------------------------------------------------------hist4------------------------------------------------------------
+    // -----------------------------------------------------------hist4------------------------------------------------------------
     var hist4 = d3.select("#hist4")
         .append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -264,11 +263,11 @@ function displayHistogramView() {
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x));
 
-        hist4.append("text")
+    hist4.append("text")
         .attr("class", "x label")
         .attr("text-anchor", "end")
-        .attr("x", width-60)
-        .attr("y", height+25)
+        .attr("x", width - 100)
+        .attr("y", height + 25)
         .style("font-size", "10px")
         .text("PersonalScores");
 
@@ -316,11 +315,11 @@ function displayHistogramView() {
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x));
 
-        hist5.append("text")
+    hist5.append("text")
         .attr("class", "x label")
         .attr("text-anchor", "end")
-        .attr("x", width-60)
-        .attr("y", height+25)
+        .attr("x", width - 60)
+        .attr("y", height + 25)
         .style("font-size", "10px")
         .text("CompoundSentimentScore");
 
