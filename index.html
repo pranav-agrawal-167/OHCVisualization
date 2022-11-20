@@ -1,14 +1,17 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    
-  </head>
-  <body>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+
+<body>
     <h1></h1>
     <div class="pt-4"></div>
     <div class="row bg-light">
@@ -17,65 +20,69 @@
         <div class="col-md-2">
             <b>Vertical Order:</b>
             <form>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="verticalOrderButton" id="temporalButton" value="temporalButton" onclick="displayChartView()"/>
-                <label class="form-check-label" for="flexRadioDefault01"> Temporal </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="verticalOrderButton" id="sentimentScore" value="sentimentScore" onclick="displayChartView()"/>
-                <label class="form-check-label" for="flexRadioDefault01"> Sentiment Score </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="verticalOrderButton" id="replyCountButton" value="replyCountButton" onclick="displayChartView()"/>
-                <label class="form-check-label" for="flexRadioDefault01"> Reply Count </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="verticalOrderButton" id="totalConversationButton" value="totalConversationButton" onclick="displayChartView()"/>
-                <label class="form-check-label" for="flexRadioDefault01"> Total Conversation  </label>
-            </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="verticalOrderButton" id="temporalButton"
+                        value="temporalButton" onclick="displayChartView()" />
+                    <label class="form-check-label" for="flexRadioDefault01"> Temporal </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="verticalOrderButton" id="sentimentScore"
+                        value="sentimentScore" onclick="displayChartView()" />
+                    <label class="form-check-label" for="flexRadioDefault01"> Sentiment Score </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="verticalOrderButton" id="replyCountButton"
+                        value="replyCountButton" onclick="displayChartView()" />
+                    <label class="form-check-label" for="flexRadioDefault01"> Reply Count </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="verticalOrderButton" id="totalConversationButton"
+                        value="totalConversationButton" onclick="displayChartView()" />
+                    <label class="form-check-label" for="flexRadioDefault01"> Total Conversation </label>
+                </div>
             </form>
-              
+
         </div>
-              
+
         <div class="col-md-2">
             <b>Box Width:</b>
             <form>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"/>
-                <label class="form-check-label" for="flexRadioDefault1"> Square </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"/>
-                <label class="form-check-label" for="flexRadioDefault1"> Question Length </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"/>
-                <label class="form-check-label" for="flexRadioDefault1"> Reply Count </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"/>
-                <label class="form-check-label" for="flexRadioDefault1"> Total Conversation  </label>
-            </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                    <label class="form-check-label" for="flexRadioDefault1"> Square </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                    <label class="form-check-label" for="flexRadioDefault1"> Question Length </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                    <label class="form-check-label" for="flexRadioDefault1"> Reply Count </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                    <label class="form-check-label" for="flexRadioDefault1"> Total Conversation </label>
+                </div>
             </form>
-              
-            
+
+
         </div>
 
         <div class="col-md-1">
             <b>Box Colour:</b>
             <form>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"/>
-                <label class="form-check-label" for="flexRadioDefault1"> Personal Score</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"/>
-                <label class="form-check-label" for="flexRadioDefault1"> Sentiment Score </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"/>
-                <label class="form-check-label" for="flexRadioDefault1"> Cult Score </label>
-            </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                    <label class="form-check-label" for="flexRadioDefault1"> Personal Score</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                    <label class="form-check-label" for="flexRadioDefault1"> Sentiment Score </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                    <label class="form-check-label" for="flexRadioDefault1"> Cult Score </label>
+                </div>
             </form>
         </div>
 
@@ -84,7 +91,7 @@
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1">
                 <label class="form-check-label" for="flexCheckDefault1">Expand replies</label>
-              </div>
+            </div>
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1">
                 <label class="form-check-label" for="flexCheckDefault1">Arrange by Duration</label>
@@ -97,88 +104,101 @@
                 <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1">
                 <label class="form-check-label" for="flexCheckDefault1">Replier Mark</label>
             </div>
-            
+
         </div>
 
         <div class="col-md-2">
             <b>Wordcloud:</b>
             <form>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"/>
-                <label class="form-check-label" for="flexRadioDefault1"> Medical Keyword </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"/>
-                <label class="form-check-label" for="flexRadioDefault1"> Weight </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"/>
-                <label class="form-check-label" for="flexRadioDefault1"> Age </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"/>
-                <label class="form-check-label" for="flexRadioDefault1"> Food, Meds, Body  </label>
-            </div>
-            </form>     
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                    <label class="form-check-label" for="flexRadioDefault1"> Medical Keyword </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                    <label class="form-check-label" for="flexRadioDefault1"> Weight </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                    <label class="form-check-label" for="flexRadioDefault1"> Age </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                    <label class="form-check-label" for="flexRadioDefault1"> Food, Meds, Body </label>
+                </div>
+            </form>
         </div>
 
         <div class="col-md-1">
             <b>TextView:</b>
             <form>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="textViewRadioButton" id="diabetes" value="diabetes" checked="checked" onclick="displayTextView()"/>
-                <label class="form-check-label" for="textViewRadioButton"> Diabetes </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="textViewRadioButton" id="insulin" value="insulin" onclick="displayTextView()"/>
-                <label class="form-check-label" for="textViewRadioButton"> Insulin </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="textViewRadioButton" id="pump" value="pump" onclick="displayTextView()"/>
-                <label class="form-check-label" for="textViewRadioButton"> Pump </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="textViewRadioButton" id="omnipod" value="omnipod" onclick="displayTextView()"/>
-                <label class="form-check-label" for="textViewRadioButton"> Omnipod  </label>
-            </div>
-            </form>     
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="textViewRadioButton" id="diabetes"
+                        value="diabetes" checked="checked" onclick="displayTextView()" />
+                    <label class="form-check-label" for="textViewRadioButton"> Diabetes </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="textViewRadioButton" id="insulin" value="insulin"
+                        onclick="displayTextView()" />
+                    <label class="form-check-label" for="textViewRadioButton"> Insulin </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="textViewRadioButton" id="pump" value="pump"
+                        onclick="displayTextView()" />
+                    <label class="form-check-label" for="textViewRadioButton"> Pump </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="textViewRadioButton" id="omnipod" value="omnipod"
+                        onclick="displayTextView()" />
+                    <label class="form-check-label" for="textViewRadioButton"> Omnipod </label>
+                </div>
+            </form>
         </div>
         <div class="col-md-1"></div>
     </div>
 
     <div class="row">
+
         <div style="margin-left: 50px; width:35%;">
             column for scatter plot and histograms
-            <div class = "column" style="height:50%;">
+            <div class="column" style="height:50%;">
                 row for scatter plot
+
             </div>
-            <div id= "hist-row-1" class = "row">
+            <div id="hist-row-1" class="row">
                 <svg id="hist1"></svg>
                 <svg id="hist2"></svg>
             </div>
-            <div id= "hist-row-2" class = "row">
+            <div id="hist-row-2" class="row">
                 <svg id="hist4"></svg>
                 <svg id="hist5"></svg>
             </div>
-            <div id= "hist-row-3" class = "row">
-                <svg style="width: 100%;"id="hist3"></svg>
+            <div id="hist-row-3" class="row">
+                <svg style="width: 100%;" id="hist3"></svg>
             </div>
         </div>
         <div style="width: 33%;">
             column for thread view
         </div>
         <div id="textView" style="width: 22%; height: 500px; overflow: auto;">
-        
+
         </div>
     </div>
-    
+
     </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="js/main.js"></script>
-  </body>
+</body>
+
 </html>
