@@ -475,6 +475,7 @@ function chart(result) {
 
         bars.enter().append("rect")
             .attr("class", "bars")
+            .attr("id", d => d.data.ID)
             .attr("width", x.bandwidth())
             .attr("x", d => x(d.data.ID))
             .attr("y", d => y(d[1]))
