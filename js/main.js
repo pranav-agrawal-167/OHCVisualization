@@ -3,6 +3,13 @@ let textViewList = [];
 let textViewKeys = ["Text (OP)", "Reply 1", "Reply 2", "Reply 3"];
 let twoWayBarList = [];
 let twoWayBarListKeys = ["ID", "QuickestReply", "OPSentiment", "Total Number of Replies", "Conversation Duration", "Reply1Sentiment", "Reply2Sentiment", "Reply3Sentiment", "Text (OP)"];
+
+let wordCloudMap = new Map();
+let medicalKeyWords = ["diabetes","doctor","pharmacist","hypoglycemia","diabetic","Dexcom","Endocrinologists","CMG","Medtronic","insulin","Fasting Insulin","Medicare","A1c","Omnipod","CCS Medical","Insulet","Tandem pump", "I:C calculations","Accucheck","Free Style Libre","LADA","lantus","Tslim","U-500","U-100","ISIG","demo pod", "G5 integration","novorapid","tresiba atm","HbA1c","Dexcom g5","Enlite sensors","MDI","CGM","infusion set", "Retnox","United Federation of Insulin Pumpers","Animas Ping pumps","Medicare","Auto-immune disorder","Enlite/Guardian 3", "CGM","BG","UHC insurance","Edgepark","suspend insulin delivery","MIO infusion","gastroparesis","PCP","NPH", "Lantus","Levemir","Syringe","TruSteel","norm","norm80","Novolin R","2 vials","prebolus","NPH","Endo","basal pattern", "eversense sensor","wizard","Roche accu-check","MM pump","cold/flu","O-ring","type 1 diabetes","Cleo 90 infusion set", "cartridges","IOB","Spirit pump","scheloderma","Dexcom G5 CGM","A1C's"];
+let weights = ["670G",".08 ng/mL","3.85 ng/mL","770G","94 mg/dL","6.5 mmol/L","780g","5 unit/hr","13 grams", "0.1u","7 mmol/L","3 units/hr","200 IU","530G","1.25-1.5 g per kg","50g","75g", ,"50 grams","100lbs","220","50units","20units","300 cc","260 units"];
+let age = [" 40's","70's","30 years","3 months","24 years","2.5 years","3 years","2 three years","3 hours", "10-12 hours","3-4 nights","40's","4years","35 years","23 years","8 years","2.5 hours", "30 minutes","5 years","2 1/2 months","11 years","20 years","4 years","2 years","46 years","5 to 8 hours", "11 year","37 years","15 yrs","18 years","22 years","2-3 days","8-9 days","3 days","5 hours","4 hours"];
+let foodMedsBody = ["Humalog","t-slim/Dexcom","Dexcom CGM","C-Peptide","C-pep","Aetna Supplement"," Dexcom G6","T:Flex","Xdrip+","blood sugar","BG tests","basal testing","carbs","Blood Sugars","Carb ratio", "Bydurion BCISE","Novolog","abdomen","stomach","blood glucose","Lantus/humolog","fruit","bread", "rice","pasta","vegetables","Scar tissue","cannula"];
+
 document.addEventListener('DOMContentLoaded', function () {
     Promise.all([d3.csv('data/DiabetesDaily2.csv')])
         .then(function (values) {
@@ -17,12 +24,18 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function preprocessData() {
+
     for (var i = 0; i < dataset.length; i++) {
         currTextViewDataList = [];
+        let wordCloudString="";
         for (var key in textViewKeys) {
             var currText = dataset[i][textViewKeys[key]];
-            currTextViewDataList.push(currText);
+            if(currText!=null){
+                wordCloudString+=currText;
+                currTextViewDataList.push(currText);
+            }
         }
+        wordCloudMap.set(i,wordCloudString);
         textViewList.push(currTextViewDataList);
 
         var currChartObj = {};
@@ -121,6 +134,7 @@ function displayTextView() {
 
 function displayChartView() {
     var parameter = document.querySelector('input[name = "verticalOrderButton"]:checked').value;
+
     var copyListForSort = twoWayBarList;
     var byProperty = function(prop) {
         return function(a,b) {
@@ -415,6 +429,7 @@ function displayHistogramView() {
 }
 
 function chart(result) {
+
     d3.selectAll("#chart> *").remove(); 
     var keys = Object.keys(result[0]).slice(8),
         copy = [].concat(keys);
@@ -473,6 +488,18 @@ function chart(result) {
 
         bars.exit().remove();
 
+
+        var div = d3.select("body")
+            .append("div")
+            .style("opacity", 0)
+            .attr("class", "tooltip")
+            .style("background-color", "lightsteelblue")
+            .style("position", "absolute")
+            .style("border", "solid")
+            .style("border-width", "2px")
+            .style("border-radius", "5px")
+            .style("padding", "2px")
+
         bars.enter().append("rect")
             .attr("class", "bars")
             .attr("id", d => d.data.ID)
@@ -492,6 +519,61 @@ function chart(result) {
             })
             .attr("stroke", "#000")
             .attr("stroke-width", "0.3")
+
+            .on('mousemove', function (event,d) {
+                let wordCloudParam = document.querySelector('input[name = "wordCloudOption"]:checked').value;
+
+                let row = d.data.ID;
+                let rowText = wordCloudMap.get(row);
+                let wordCloudType =medicalKeyWords;
+                if (wordCloudParam == "weight"){
+                    wordCloudType = weights;
+                }else if (wordCloudParam == "age"){
+                    wordCloudType = age;
+                }else if(wordCloudParam == "foodMedsBody"){
+                    wordCloudType = foodMedsBody;
+                }
+                console.log(wordCloudParam);
+                console.log(wordCloudType);
+                let _html = "";
+
+                if(rowText!=undefined) {
+                    wordCloudType = wordCloudType.filter((str) =>
+                        rowText.toLowerCase().includes(str.toLowerCase()));
+                    for(let index in wordCloudType){
+                        let wordString = wordCloudType[index];
+                        _html += "<p>"+ wordString[0].toUpperCase() + wordString.slice(1)+"</p>";
+                    }
+                }
+
+
+
+                d3.select(this).transition()
+                    .duration('100')
+                    .style('opacity', '1')
+                    .attr('stroke-width','4');
+
+                div.transition()
+                    .duration(100)
+                    .style("opacity", 1);
+
+                div.html(_html)
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 15) + "px")
+                    .style("opacity", 1);
+            })
+            .on('mouseout', function (event,d) {
+
+                d3.select(this).transition()
+                    .duration('50')
+                    .style('opacity', '1')
+                    .attr('stroke-width','1')
+                    .style("stroke","black");
+
+                div.transition()
+                    .duration(50)
+                    .style("opacity", 0);
+            })
             .merge(bars)
         .transition().duration(speed)
             .attr("y", d => y(d[1]))
@@ -513,3 +595,4 @@ function stackMin(serie) {
 function stackMax(serie) {
     return d3.max(serie, function(d) { return d[1]; });
 }
+
