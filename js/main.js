@@ -2,7 +2,7 @@ let dataset;
 let textViewList = [];
 let textViewKeys = ["Text (OP)", "Reply 1", "Reply 2", "Reply 3"];
 let twoWayBarList = [];
-let twoWayBarListKeys = ["ID", "QuickestReply", "OPSentiment", "Total Number of Replies", "Conversation Duration", "Reply1Sentiment", "Reply2Sentiment", "Reply3Sentiment", "Text (OP)"];
+let twoWayBarListKeys = ["ID", "QuickestReply", "OPSentiment", "Total Number of Replies", "Conversation Duration", "Reply1Sentiment", "Reply2Sentiment", "Reply3Sentiment", "OPPersonal", "Reply1Personal", "Reply2Personal", "Reply3Personal", "QuestionLength", "Text (OP)"];
 
 let wordCloudMap = new Map();
 let medicalKeyWords = ["diabetes","doctor","pharmacist","hypoglycemia","diabetic","Dexcom","Endocrinologists","CMG","Medtronic","insulin","Fasting Insulin","Medicare","A1c","Omnipod","CCS Medical","Insulet","Tandem pump", "I:C calculations","Accucheck","Free Style Libre","LADA","lantus","Tslim","U-500","U-100","ISIG","demo pod", "G5 integration","novorapid","tresiba atm","HbA1c","Dexcom g5","Enlite sensors","MDI","CGM","infusion set", "Retnox","United Federation of Insulin Pumpers","Animas Ping pumps","Medicare","Auto-immune disorder","Enlite/Guardian 3", "CGM","BG","UHC insurance","Edgepark","suspend insulin delivery","MIO infusion","gastroparesis","PCP","NPH", "Lantus","Levemir","Syringe","TruSteel","norm","norm80","Novolin R","2 vials","prebolus","NPH","Endo","basal pattern", "eversense sensor","wizard","Roche accu-check","MM pump","cold/flu","O-ring","type 1 diabetes","Cleo 90 infusion set", "cartridges","IOB","Spirit pump","scheloderma","Dexcom G5 CGM","A1C's"];
@@ -20,11 +20,11 @@ document.addEventListener('DOMContentLoaded', function () {
             displayTextView();
             displayHistogramView();
             scatterPlot();
+            displayChartView();
         });
 });
 
 function preprocessData() {
-
     for (var i = 0; i < dataset.length; i++) {
         currTextViewDataList = [];
         let wordCloudString="";
@@ -48,9 +48,9 @@ function preprocessData() {
                 currChartObj[twoWayBarListKeys[key]] = +currVal;
             }
         }
-        currChartObj["Reply1"] = 20;
-        currChartObj["Reply2"] = 20;
-        currChartObj["Reply3"] = 20;
+        currChartObj["Reply1"] = 40;
+        currChartObj["Reply2"] = 40;
+        currChartObj["Reply3"] = 40;
         twoWayBarList.push(currChartObj);
     }
 }
@@ -134,7 +134,8 @@ function displayTextView() {
 
 function displayChartView() {
     var parameter = document.querySelector('input[name = "verticalOrderButton"]:checked').value;
-
+    var colorParameter = document.querySelector('input[name = "boxColorButton"]:checked').value;
+    var boxWidth = document.querySelector('input[name = "boxWidthButton"]:checked').id;
     var copyListForSort = twoWayBarList;
     var byProperty = function(prop) {
         return function(a,b) {
@@ -145,6 +146,15 @@ function displayChartView() {
             }
         };
     };
+    let barWidth;
+
+    if(boxWidth=="QuestionLength") {
+        barWidth ='QuestionLength'
+    } else if(boxWidth == "ReplyCount") {
+        barWidth = 'Total Number of Replies'
+    } else if (boxWidth == "ConversationDuration") {
+        barWidth = 'Conversation Duration'
+    }
     if(parameter == "temporalButton") {
         copyListForSort.sort(byProperty("QuickestReply"));
     } else if(parameter == "sentimentScore") {
@@ -154,7 +164,8 @@ function displayChartView() {
     } else {
         copyListForSort.sort(byProperty("Conversation Duration"));
     }
-    chart(copyListForSort);
+    chart(copyListForSort, colorParameter, barWidth);
+    displayThreadViewLegend(colorParameter);
 }
 
 function displayHistogramView() {
@@ -428,11 +439,10 @@ function displayHistogramView() {
         .style("fill", "#69b3a2")
 }
 
-function chart(result) {
-
+function chart(result, colorParameter, barWidth) {
     d3.selectAll("#chart> *").remove(); 
-    var keys = Object.keys(result[0]).slice(8),
-        copy = [].concat(keys);
+    var keys = Object.keys(result[0]).slice(14),
+        copy = [barWidth].concat(keys);
     var svg = d3.select("#chart"),
         margin = {top: 5, right: 5, bottom: 5, left: 10},
         width = +svg.attr("width") - margin.left - margin.right,
@@ -445,29 +455,48 @@ function chart(result) {
     var y = d3.scaleLinear()
         .rangeRound([height - margin.bottom, margin.top]);
 
-    var color = d3.scaleOrdinal()
-        .range(["steelblue", "darkorange", "lightblue", "crimson","green"]);
-
     var xAxis = svg.append("g")
         .attr("transform", "translate(0," + (height - margin.bottom) + ")")
         .attr("class","x-axis");
-
+    
     var yAxis = svg.append("g")
         .attr("transform", "translate(" + margin.left + ",0)")
         .attr("class", "y-axis");
 
-    draw("QuickestReply", 0, keys);
+    draw(result, 0);
 
     function draw(input, speed) {
-        var barColor = d3.scaleThreshold().domain([-1, -0.3, 0.3])
-            .range(["steelblue", "red", "white", "green"])
+        var barColorSentiment = d3.scaleThreshold().domain([-0.7, -0.3, 0.3, 0.7])
+            .range(["red", "pink", "white", "lightgreen", "green"])
+        var barColorPersonal = d3.scaleThreshold().domain([0.004, 0.0082, 0.015, 0.025])
+            .range(["white", "#58CCED", "#3895D3", "#1261A0", "#072F5F"])
+        var barColor;
+        var barColorParameters;
+        if(colorParameter == "personalScore") {
+            barColor = barColorPersonal;
+            barColorParameters = ["OPPersonal", "Reply1Personal", "Reply2Personal", "Reply3Personal"];
+        } else {
+            barColor = barColorSentiment;
+            barColorParameters = ["OPSentiment", "Reply1Sentiment", "Reply2Sentiment", "Reply3Sentiment"];
+        }
 
-        var data = result;
+        var data = JSON.parse(JSON.stringify(result));
+        for(let i = 0; i<result.length; i++) {
+            data[i][barWidth] = -data[i][barWidth];
+            if(barWidth == "QuestionLength") {
+                data[i]["Reply1"] = 40;
+                data[i]["Reply2"] = 40;
+                data[i]["Reply3"] = 40;
+            } else {
+                data[i]["Reply1"] = 1;
+                data[i]["Reply2"] = 1;
+                data[i]["Reply3"] = 1;
+            }
+        }
 
         var series = d3.stack()
-            .keys(keys)
+            .keys(copy)
             .offset(d3.stackOffsetDiverging)(data);
-
         x.domain(data.map(d => d.ID));
 
         y.domain([
@@ -508,13 +537,13 @@ function chart(result) {
             .attr("y", d => y(d[1]))
             .attr("fill", function(d){
                 if(d[0] < 0) { // number of characters bar => fixed color - steelblue
-                    return barColor(-100);
+                    return barColor(d.data[barColorParameters[0]]);
                 } else if(d[0] == 0) { // Reply 1 bar
-                    return barColor(d.data.Reply1Sentiment);
-                } else if(d[0] == 20) { // Reply 2 bar
-                    return barColor(d.data.Reply2Sentiment);
-                } else if(d[0] == 40) { // Reply 3 bar
-                    return barColor(d.data.Reply3Sentiment);
+                    return barColor(d.data[barColorParameters[1]]);
+                } else if(d[0] == 40 || d[0] == 1) { // Reply 2 bar
+                    return barColor(d.data[barColorParameters[2]]);
+                } else if(d[0] == 80 || d[0] == 2) { // Reply 3 bar
+                    return barColor(d.data[barColorParameters[3]]);
                 }
             })
             .attr("stroke", "#000")
@@ -533,8 +562,6 @@ function chart(result) {
                 }else if(wordCloudParam == "foodMedsBody"){
                     wordCloudType = foodMedsBody;
                 }
-                console.log(wordCloudParam);
-                console.log(wordCloudType);
                 let _html = "";
 
                 if(rowText!=undefined) {
@@ -567,7 +594,7 @@ function chart(result) {
                 d3.select(this).transition()
                     .duration('50')
                     .style('opacity', '1')
-                    .attr('stroke-width','1')
+                    .attr('stroke-width','0.3')
                     .style("stroke","black");
 
                 div.transition()
@@ -581,7 +608,7 @@ function chart(result) {
 
         xAxis.transition().duration(speed)
             .attr("transform", "translate(0," + y(0) + ")")
-            .call(d3.axisBottom(x));
+            .call(d3.axisBottom(x).tickValues(0));
 
         yAxis.transition().duration(speed)
             .call(d3.axisLeft(y));
@@ -596,3 +623,63 @@ function stackMax(serie) {
     return d3.max(serie, function(d) { return d[1]; });
 }
 
+function displayThreadViewLegend(boxColor) {
+    var svg = d3.select("#chart")
+    if(boxColor == "sentimentScore") {
+        textLeft = "Negative"
+        textRight = "Positive"
+        color1 = "red"
+        color2 = "pink"
+        color3 = "white"
+        color4 = "lightgreen"
+        color5 = "green"
+        x = -290
+    } else {
+        textLeft = "Not Personal"
+        textRight = "Personal"
+        color1 = "white"
+        color2 = "#58CCED"
+        color3 = "#3895D3"
+        color4 = "#1261A0"
+        color5 = "#072F5F"
+        x = -320
+    }
+    var rectX = -45;
+    svg.append("text").attr("x", x).attr("y", -35).attr('transform', 'rotate(-90 -0 0)').text(textLeft).style("font-size", "15px").attr("alignment-baseline","middle")
+    svg.append("text").attr("x", -170).attr("y", -35).attr('transform', 'rotate(-90 -0 0)').text(textRight).style("font-size", "15px").attr("alignment-baseline","middle")
+    svg.append("rect")
+    .attr("x", rectX)
+    .attr("y", 215)
+    .attr("width", 10)
+    .attr("height", 10)
+    .attr("style", "outline: thin solid black;")
+    .style("fill", color1);
+    svg.append("rect")
+    .attr("x", rectX)
+    .attr("y", 205)
+    .attr("width", 10)
+    .attr("height", 10)
+    .attr("style", "outline: thin solid black;")
+    .style("fill", color2);
+    svg.append("rect")
+    .attr("x", rectX)
+    .attr("y", 195)
+    .attr("width", 10)
+    .attr("height", 10)
+    .attr("style", "outline: thin solid black;")
+    .style("fill", color3);
+    svg.append("rect")
+    .attr("x", rectX)
+    .attr("y", 185)
+    .attr("width", 10)
+    .attr("height", 10)
+    .attr("style", "outline: thin solid black;")
+    .style("fill", color4);
+    svg.append("rect")
+    .attr("x", rectX)
+    .attr("y", 175)
+    .attr("width", 10)
+    .attr("height", 10)
+    .attr("style", "outline: thin solid black;")
+    .style("fill", color5);
+}

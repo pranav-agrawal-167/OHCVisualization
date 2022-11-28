@@ -22,7 +22,7 @@
             <form>
                 <div  class="form-check">
                     <input class="form-check-input" type="radio" name="verticalOrderButton" id="temporalButton"
-                        value="temporalButton" onclick="displayChartView()" />
+                        value="temporalButton" checked="checked" onclick="displayChartView()" />
                     <label class="form-check-label" for="flexRadioDefault01"> Temporal </label>
                 </div>
                 <div class="form-check">
@@ -48,20 +48,20 @@
             <b>Box Width:</b>
             <form>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                    <input class="form-check-input" type="radio" name="boxWidthButton" id="Square" onclick="displayChartView()"/>
                     <label class="form-check-label" for="flexRadioDefault1"> Square </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                    <input class="form-check-input" type="radio" name="boxWidthButton" id="QuestionLength" checked="checked" onclick="displayChartView()"/>
                     <label class="form-check-label" for="flexRadioDefault1"> Question Length </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                    <input class="form-check-input" type="radio" name="boxWidthButton" id="ReplyCount" onclick="displayChartView()"/>
                     <label class="form-check-label" for="flexRadioDefault1"> Reply Count </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
-                    <label class="form-check-label" for="flexRadioDefault1"> Total Conversation </label>
+                    <input class="form-check-input" type="radio" name="boxWidthButton" id="ConversationDuration" onclick="displayChartView()"/>
+                    <label class="form-check-label" for="flexRadioDefault1"> Total Conversation Duration</label>
                 </div>
             </form>
 
@@ -72,15 +72,15 @@
             <b>Box Colour:</b>
             <form>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                    <input class="form-check-input" type="radio" name="boxColorButton" id="personalScore" value="personalScore" onclick="displayChartView()" />
                     <label class="form-check-label" for="flexRadioDefault1"> Personal Score</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                    <input class="form-check-input" type="radio" name="boxColorButton" id="sentimentScore" value="sentimentScore" checked="checked" onclick="displayChartView()" />
                     <label class="form-check-label" for="flexRadioDefault1"> Sentiment Score </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                    <input class="form-check-input" type="radio" name="boxColorButton" id="cultScore" onclick="displayChartView()" />
                     <label class="form-check-label" for="flexRadioDefault1"> Cult Score </label>
                 </div>
             </form>
