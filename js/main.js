@@ -146,14 +146,17 @@ function displayChartView() {
             }
         };
     };
-    let barWidth;
+    let barWidth, labelForAxis;
 
     if(boxWidth=="QuestionLength") {
         barWidth ='QuestionLength'
+        labelForAxis = "Number of characters";
     } else if(boxWidth == "ReplyCount") {
         barWidth = 'Total Number of Replies'
-    } else if (boxWidth == "ConversationDuration") {
+        labelForAxis = "Number of Replies";
+    }else {
         barWidth = 'Conversation Duration'
+        labelForAxis = "Conversation duration";
     }
     if(parameter == "temporalButton") {
         copyListForSort.sort(byProperty("QuickestReply"));
@@ -165,7 +168,7 @@ function displayChartView() {
         copyListForSort.sort(byProperty("Conversation Duration"));
     }
     chart(copyListForSort, colorParameter, barWidth);
-    displayThreadViewLegend(colorParameter);
+    displayThreadViewLegend(colorParameter, labelForAxis);
 }
 
 function displayHistogramView() {
@@ -623,7 +626,7 @@ function stackMax(serie) {
     return d3.max(serie, function(d) { return d[1]; });
 }
 
-function displayThreadViewLegend(boxColor) {
+function displayThreadViewLegend(boxColor, labelForAxis) {
     var svg = d3.select("#chart")
     if(boxColor == "sentimentScore") {
         textLeft = "Negative"
@@ -633,7 +636,7 @@ function displayThreadViewLegend(boxColor) {
         color3 = "white"
         color4 = "lightgreen"
         color5 = "green"
-        x = -290
+        x = -690
     } else {
         textLeft = "Not Personal"
         textRight = "Personal"
@@ -642,42 +645,43 @@ function displayThreadViewLegend(boxColor) {
         color3 = "#3895D3"
         color4 = "#1261A0"
         color5 = "#072F5F"
-        x = -320
+        x = -720
     }
-    var rectX = -45;
-    svg.append("text").attr("x", x).attr("y", -35).attr('transform', 'rotate(-90 -0 0)').text(textLeft).style("font-size", "15px").attr("alignment-baseline","middle")
-    svg.append("text").attr("x", -170).attr("y", -35).attr('transform', 'rotate(-90 -0 0)').text(textRight).style("font-size", "15px").attr("alignment-baseline","middle")
+    var rectX = -95;
+    svg.append("text").attr("x", x).attr("y", -85).attr('transform', 'rotate(-90 -0 0)').text(textLeft).style("font-size", "20px").attr("alignment-baseline","middle")
+    svg.append("text").attr("x", -550).attr("y", -85).attr('transform', 'rotate(-90 -0 0)').text(textRight).style("font-size", "20px").attr("alignment-baseline","middle")
+    svg.append("text").attr("x", -670).attr("y", -35).attr('transform', 'rotate(-90 -0 0)').text(labelForAxis).style("font-size", "15px").attr("alignment-baseline","middle")
     svg.append("rect")
     .attr("x", rectX)
-    .attr("y", 215)
+    .attr("y", 595)
     .attr("width", 10)
     .attr("height", 10)
     .attr("style", "outline: thin solid black;")
     .style("fill", color1);
     svg.append("rect")
     .attr("x", rectX)
-    .attr("y", 205)
+    .attr("y", 585)
     .attr("width", 10)
     .attr("height", 10)
     .attr("style", "outline: thin solid black;")
     .style("fill", color2);
     svg.append("rect")
     .attr("x", rectX)
-    .attr("y", 195)
+    .attr("y", 575)
     .attr("width", 10)
     .attr("height", 10)
     .attr("style", "outline: thin solid black;")
     .style("fill", color3);
     svg.append("rect")
     .attr("x", rectX)
-    .attr("y", 185)
+    .attr("y", 565)
     .attr("width", 10)
     .attr("height", 10)
     .attr("style", "outline: thin solid black;")
     .style("fill", color4);
     svg.append("rect")
     .attr("x", rectX)
-    .attr("y", 175)
+    .attr("y", 555)
     .attr("width", 10)
     .attr("height", 10)
     .attr("style", "outline: thin solid black;")
