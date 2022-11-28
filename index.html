@@ -13,13 +13,14 @@
 
 <body>
     <h1></h1>
+   
     <div class="pt-4"></div>
-    <div class="row bg-light">
 
-        <div class="col-md-1"></div>
-        <div   class="col-md-2">
+    <div class="row bg-light" style="font-size:22px">  
+        <div   class="col-sm-1"></div>   
+        <div   class="col-sm-2">
             <b>Vertical Order:</b>
-            <form>
+            <form class="align-middle">
                 <div  class="form-check">
                     <input class="form-check-input" type="radio" name="verticalOrderButton" id="temporalButton"
                         value="temporalButton" checked="checked" onclick="displayChartView()" />
@@ -44,7 +45,7 @@
 
         </div>
 
-        <div class="col-md-2">
+        <div class="col-sm-2">
             <b>Box Width:</b>
             <form>
                 <div class="form-check">
@@ -68,7 +69,7 @@
 
         </div>
 
-        <div class="col-md-1">
+        <div class="col-sm-2">
             <b>Box Colour:</b>
             <form>
                 <div class="form-check">
@@ -86,7 +87,7 @@
             </form>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-sm-2">
             <b>Reply Box:</b>
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1">
@@ -107,7 +108,7 @@
 
         </div>
 
-        <div class="col-md-2">
+        <div class="col-sm-2">
             <b>Wordcloud:</b>
             <form>
                 <div class="form-check">
@@ -129,7 +130,7 @@
             </form>
         </div>
 
-        <div class="col-md-1">
+        <div class="col-sm-1">
             <b>TextView:</b>
             <form>
                 <div class="form-check">
@@ -154,38 +155,71 @@
                 </div>
             </form>
         </div>
-        <div class="col-md-1"></div>
+        
     </div>
-
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <div class="row">
+        
+        <div class="col">
+                <!-- Scatter Plot -->
+                <div style="margin-left: 50px;">
 
-        <div style="margin-left: 50px; width:35%;">
+                    <div class="row">
+                        <div  class="col-sm-12">
+                        <div class="column" style="height:50%">
+                            <svg id="scatter" viewBox="0 0 400 300"></svg>
+                        </div>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <div class="row">
+                        <div  class="col-sm-6">
+                            <div id="hist-row-1" class="row">
+                                <svg id="hist1"></svg>
+                                <svg id="hist2"></svg>
+                            </div>
+                            
+                        </div>
+                        <div   class="col-sm-6">
+                            <div id="hist-row-2" class="row">
+                                <svg id="hist4"></svg>
+                                <svg id="hist5"></svg>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <div id="hist-row-3" class="row">
+                        <svg style="width: 100%;" id="hist3"></svg>
+                    </div>
+                </div>
+                
             
-            <div class="column" style="height:50%;">
-                <svg id="scatter" viewBox="0 0 400 300"></svg>
+        </div>
 
+        <div class="col">
+            <div class="container"> 
+            <div style="width: 100%; height: 100%;">
+                <svg width="1300" height="1050" id="chart" style="rotate: 90deg;" viewBox="-50 -50 1000 1000" ></svg>
             </div>
-            <div id="hist-row-1" class="row">
-                <svg id="hist1"></svg>
-                <svg id="hist2"></svg>
-            </div>
-            <div id="hist-row-2" class="row">
-                <svg id="hist4"></svg>
-                <svg id="hist5"></svg>
-            </div>
-            <div id="hist-row-3" class="row">
-                <svg style="width: 100%;" id="hist3"></svg>
             </div>
         </div>
-        <div style="width: 33%;">
-            <svg width="500" height="400" id="chart" style="rotate: 90deg;" viewBox="-50 -50 500 400"></svg>
-        </div>
-        <div id="textView" style="width: 22%; height: 500px; overflow: auto;">
-
+        <div class="col-md-4">
+            <div id="textView" style="width: 100%; height: 1200px; overflow: auto;">
+            </div>
         </div>
     </div>
 
-    </div>
+    
+    
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

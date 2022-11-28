@@ -444,7 +444,7 @@ function chart(result, colorParameter, barWidth) {
     var keys = Object.keys(result[0]).slice(14),
         copy = [barWidth].concat(keys);
     var svg = d3.select("#chart"),
-        margin = {top: 5, right: 5, bottom: 5, left: 10},
+        margin = {top: 100, right: 5, bottom: 5, left: 10},
         width = +svg.attr("width") - margin.left - margin.right,
         height = +svg.attr("height") - margin.top - margin.bottom;
 
@@ -467,7 +467,7 @@ function chart(result, colorParameter, barWidth) {
 
     function draw(input, speed) {
         var barColorSentiment = d3.scaleThreshold().domain([-0.7, -0.3, 0.3, 0.7])
-            .range(["red", "pink", "white", "lightgreen", "green"])
+            .range(["#FF4760", "#FFA0AC", "white", "#B4DC7F", "green"])
         var barColorPersonal = d3.scaleThreshold().domain([0.004, 0.0082, 0.015, 0.025])
             .range(["white", "#58CCED", "#3895D3", "#1261A0", "#072F5F"])
         var barColor;
