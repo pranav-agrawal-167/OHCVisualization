@@ -158,6 +158,7 @@ function displayChartView() {
         barWidth = 'Conversation Duration'
         labelForAxis = "Conversation duration";
     }
+
     if(parameter == "temporalButton") {
         copyListForSort.sort(byProperty("QuickestReply"));
     } else if(parameter == "sentimentScore") {
@@ -168,7 +169,7 @@ function displayChartView() {
         copyListForSort.sort(byProperty("Conversation Duration"));
     }
     chart(copyListForSort, colorParameter, barWidth);
-    displayThreadViewLegend(colorParameter, labelForAxis);
+    displayThreadViewLegend(colorParameter,labelForAxis);
 }
 
 function displayHistogramView() {
@@ -626,7 +627,7 @@ function stackMax(serie) {
     return d3.max(serie, function(d) { return d[1]; });
 }
 
-function displayThreadViewLegend(boxColor, labelForAxis) {
+function displayThreadViewLegend(boxColor,labelForAxis) {
     var svg = d3.select("#chart")
     if(boxColor == "sentimentScore") {
         textLeft = "Negative"
@@ -645,7 +646,7 @@ function displayThreadViewLegend(boxColor, labelForAxis) {
         color3 = "#3895D3"
         color4 = "#1261A0"
         color5 = "#072F5F"
-        x = -720
+        x = -725
     }
     var rectX = -95;
     svg.append("text").attr("x", x).attr("y", -85).attr('transform', 'rotate(-90 -0 0)').text(textLeft).style("font-size", "20px").attr("alignment-baseline","middle")

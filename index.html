@@ -39,7 +39,7 @@
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="verticalOrderButton" id="totalConversationButton"
                         value="totalConversationButton" onclick="displayChartView()" />
-                    <label class="form-check-label" for="flexRadioDefault01"> Total Conversation </label>
+                    <label class="form-check-label" for="flexRadioDefault01"> Total Conversation Duration </label>
                 </div>
             </form>
 
@@ -48,6 +48,10 @@
         <div class="col-sm-2">
             <b>Box Width:</b>
             <form>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="boxWidthButton" id="Square" onclick="displayChartView()"/>
+                    <label class="form-check-label" for="flexRadioDefault1"> Square </label>
+                </div>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="boxWidthButton" id="QuestionLength" checked="checked" onclick="displayChartView()"/>
                     <label class="form-check-label" for="flexRadioDefault1"> Question Length </label>
@@ -59,10 +63,6 @@
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="boxWidthButton" id="ConversationDuration" onclick="displayChartView()"/>
                     <label class="form-check-label" for="flexRadioDefault1"> Total Conversation Duration</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="boxWidthButton" id="Square" onclick="displayChartView()"/>
-                    <label class="form-check-label" for="flexRadioDefault1"> Square </label>
                 </div>
             </form>
 
